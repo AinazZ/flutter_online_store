@@ -1,76 +1,95 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-Future<Product> fetchProduct() async {
-  final response = await http.get('http://ostest.whitetigersoft.ru/api/common/product/list?appKey=phynMLgDkiG06cECKA3LJATNiUZ1ijs-eNhTf0IGq4mSpJF3bD42MjPUjWwj7sqLuPy4_nBCOyX3-fRiUl6rnoCjQ0vYyKb-LR03x9kYGq53IBQ5SrN8G1jSQjUDplXF');
+Future<List<Product>> fetchProduct(http.Client client) async {
+  final response = await client.get('http://ostest.whitetigersoft.ru/api/common/product/list?appKey=phynMLgDkiG06cECKA3LJATNiUZ1ijs-eNhTf0IGq4mSpJF3bD42MjPUjWwj7sqLuPy4_nBCOyX3-fRiUl6rnoCjQ0vYyKb-LR03x9kYGq53IBQ5SrN8G1jSQjUDplXF');
 
-  if (response.statusCode == 200) {
-    return Product.fromJson(json.decode(response.body));
-  } else {
-    throw Exception('Failed to load product');
-  }
+  return compute(parseProducts, response.body);
+}
+
+List<Product> parseProducts(String responseBody) {
+  final parsed = jsonDecode(responseBody).cast<Map<String, dynamic>>();
+
+  return parsed.map<Product>((json) => Product.fromJson(json)).toList();
 }
 
 class Product {
   final int productId;
   final String title;
   final int price;
+  final String imageUrl;
 
-  Product({this.productId, this.title, this.price});
+  Product({this.productId, this.title, this.price, this.imageUrl});
 
   factory Product.fromJson(Map<String, dynamic> json) {
     return Product(
-      productId: json['productId'],
-      title: json['title'],
-      price: json['price'],
+      productId: json['productId'] as int,
+      title: json['title'] as String,
+      price: json['price'] as int,
+      imageUrl: json['imageUrl'] as String,
     );
   }
 }
 
 void main() => runApp(App());
 
-class App extends StatefulWidget {
-  App({Key key}) : super(key: key);
-
+class App extends StatelessWidget {
   @override
-  _AppState createState() => _AppState();
+  Widget build(BuildContext context) {
+    final appTitle = 'Список продуктов';
+
+    return MaterialApp(
+      title: appTitle,
+      home: ProductPage(title: appTitle),
+    );
+  }
 }
 
-class _AppState extends State<App> {
-  Future<Product> futureProduct;
+class ProductPage extends StatelessWidget {
+  final String title;
 
-  @override
-  void initState() {
-    super.initState();
-    futureProduct = fetchProduct();
-  }
+  ProductPage({Key key, this.title}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Продукты',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Продукты'),
-        ),
-        body: Center(
-          child: FutureBuilder<Product>(
-            future: futureProduct,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text(snapshot.data.title);
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-
-              return CircularProgressIndicator();
-            },
-          ),
-        ),
+    return Scaffold(
+      appBar:AppBar(
+        title: Text(title),
       ),
+      body: FutureBuilder<List<Product>>(
+        future: fetchProduct(http.Client()),
+        builder: (context, snapshot){
+          if (snapshot.hasError) print(snapshot.error);
+
+          return snapshot.hasData
+            ? ProductList(products: snapshot.data)
+            : Center(child: CircularProgressIndicator());
+        },
+      ),
+    );
+  }
+}
+
+class ProductList extends StatelessWidget {
+  final List<Product> products;
+
+  ProductList({Key key, this.products}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: Image.network(products[index].imageUrl),
+          title: Text('${products[index].title}'),
+          subtitle: Text('${products[index].price}'),
+        );
+      }
     );
   }
 }
