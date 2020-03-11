@@ -61,25 +61,34 @@ class _AppState extends State<App> {
         body: FutureBuilder<Product>(
           future: futureProduct,
           builder: (context, snapshot){
-            if (snapshot.hasData) {
-              return ListView.builder(
-                itemCount: snapshot.data.length,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    leading: Image.network(snapshot.data[index].imageUrl),
-                    title: Text(snapshot.data[index].title),
-                    //subtitle: Text('${products[index].price}'),
-                  );
-                }
-              );
-            } else if (snapshot.hasError) {
-              return Text('${snapshot.error}');
-            }
+            if (snapshot.hasError) print(snapshot.error);
 
-            return CircularProgressIndicator();
+            return snapshot.hasData
+              ? ProductList(products: snapshot.data)
+              : Center(child: CircularProgressIndicator());
           },
         ),
       )
+    );
+  }
+}
+
+class ProductList extends StatelessWidget {
+  final Future<Product> products;
+
+  ProductList({Key key, this.products}) : super(key: key);
+  
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          leading: Image.network(products[index].imageUrl),
+          title: Text(products[index].title),
+          //subtitle: Text('${products[index].price}'),
+        );
+      }
     );
   }
 }
