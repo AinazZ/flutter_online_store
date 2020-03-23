@@ -11,13 +11,15 @@ class ProductList extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       itemCount: products.length,
-      itemBuilder: (context, index) => _buildListItem(products, index),
+      itemBuilder: (context, index) {
+        final product = products[index];
+
+        return _buildListItem(product);
+      },
     );
   }
 
-  ListTile _buildListItem(products, index) {
-    final product = products[index];
-
+  ListTile _buildListItem(product) {
     return ListTile(
       title: Text(product.title),
       leading: Image.network(product.imageurl),

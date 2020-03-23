@@ -13,7 +13,7 @@ class ProductListPage extends StatefulWidget {
 
 class ProductListPageState extends State<ProductListPage> {
   Future<List<Product>> products;
-  var productApi = new ProductApi();
+  var productApi = ProductApi();
 
   @override
   void initState() {
