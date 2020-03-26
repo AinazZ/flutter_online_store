@@ -21,11 +21,13 @@ class CategoryApi {
     var jsonResponse = json.decode(responseBody);
     if (!(jsonResponse is Map<String, dynamic>)) {
       throw Exception('Fail');
-    }
-    var jsonData = jsonResponse["data"];
-    var jsonCategories = jsonData["categories"];
-    final categories = jsonCategories.cast<Map<String, dynamic>>();
+    } else {
+      var jsonData = jsonResponse["data"];
+      var jsonCategories = jsonData["categories"];
 
-    return categories.map<Category>((json) => Category.fromJson(json)).toList();
+      final categories = jsonCategories.cast<Map<String, dynamic>>();
+
+      return categories.map<Category>((json) => Category.fromJson(json)).toList();
+    }
   }
- }
+}

@@ -25,7 +25,7 @@ class ProductListPageState extends State<ProductListPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Online Store'),
+        title: Text('Товары'),
       ),
       body: FutureBuilder<List<Product>>(
         future: products,
