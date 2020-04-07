@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutteronlinestore/product/product_api.dart';
 import 'package:flutteronlinestore/product/product.dart';
+import 'package:flutteronlinestore/product/product_list_view_item.dart';
 
 class ProductListPage extends StatefulWidget {
   final int categoryId;
@@ -43,19 +44,9 @@ class ProductListPageState extends State<ProductListPage> {
         body: ListView.builder(
           itemCount: length,
           itemBuilder: (context, index) {
-            final product = products[index];
-
-            return _buildListItem(context, index, product);
+            return ProductListViewItem(index, products);
           },
         ),
-    );
-  }
-
-  ListTile _buildListItem(BuildContext context, int index, dynamic product) {
-    return ListTile(
-      title: Text(product.title),
-      leading: Image.network(product.imageUrl),
-      trailing: Text(product.price.toString()),
     );
   }
 }

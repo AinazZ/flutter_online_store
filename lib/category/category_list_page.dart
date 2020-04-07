@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutteronlinestore/category/category_api.dart';
 import 'package:flutteronlinestore/category/category.dart';
-import 'package:flutteronlinestore/product/product_list_page.dart';
+import 'package:flutteronlinestore/category/category_list_view_item.dart';
 
 class CategoryListPage extends StatefulWidget {
   @override
@@ -47,33 +47,9 @@ class CategoryListPageState extends State<CategoryListPage> {
           ),
           itemCount: length,
           itemBuilder: (context, index) {
-            return _buildGridItem(context, index, categories);
+            return CategoryListViewItem(index, categories);
           },
         )
-    );
-  }
-
-  Widget _buildGridItem(BuildContext context, int index, dynamic categories) {
-    var category = categories[index];
-
-    return GestureDetector(
-      onTap: () {
-        int categoryId = category.categoryId;
-        String title = category.title;
-
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => ProductListPage(categoryId, title),
-            ),
-        );
-      },
-      child: Column(
-        children: <Widget>[
-          Image.network(category.imageUrl),
-          Text(category.title),
-        ],
-      ),
     );
   }
 }
