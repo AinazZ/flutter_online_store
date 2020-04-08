@@ -10,10 +10,16 @@ class ProductListViewItem extends StatelessWidget {
   Widget build(BuildContext context) {
     var product = products[index];
 
-    return ListTile(
-      title: Text(product.title),
-      leading: Image.network(product.imageUrl),
-      trailing: Text(product.price.toString()),
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            Image.network(product.imageUrl),
+            Text(product.title),
+            Text(product.price.toString()),
+          ],
+        ),
+      ],
     );
   }
 }

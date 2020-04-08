@@ -7,7 +7,7 @@ import 'package:flutteronlinestore/base_api.dart';
 import 'package:flutteronlinestore/product/product.dart';
 
 class ProductApi extends BaseApi {
-  Future<List<Product>> loadProducts(categoryId) async {
+  Future<List<Product>> loadProducts(int categoryId) async {
     var relativePath = "common/product/list";
     var apiUrl = getApiUrl(relativePath);
 

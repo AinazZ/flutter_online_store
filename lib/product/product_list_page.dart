@@ -28,7 +28,7 @@ class ProductListPageState extends State<ProductListPage> {
     loadProducts(widget.categoryId);
   }
 
-  void loadProducts(categoryId) async {
+  void loadProducts(int categoryId) async {
     products = await productApi.loadProducts(categoryId);
     setState(() {});
   }
