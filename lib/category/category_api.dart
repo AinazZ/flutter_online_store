@@ -9,7 +9,8 @@ import 'package:flutteronlinestore/category/category.dart';
 class CategoryApi extends BaseApi {
   Future<List<Category>> loadCategories() async {
     var relativePath = "common/category/list";
-    var apiUrl = getApiUrl(relativePath);
+    var categoryId;
+    var apiUrl = getApiUrl(relativePath, categoryId);
 
     final response = await http.get(apiUrl);
 

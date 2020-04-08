@@ -26,7 +26,11 @@ class CategoryListViewItem extends StatelessWidget {
       },
       child: Column(
         children: <Widget>[
-          Image.network(category.imageUrl),
+          Image.network(
+            category.imageUrl,
+            width: 145,
+            height: 145,
+          ),
           Text(category.title),
         ],
       ),
