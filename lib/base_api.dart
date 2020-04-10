@@ -4,7 +4,7 @@ abstract class BaseApi {
 
   getApiUrl(relativePath, categoryId) {
     if (categoryId != null) {
-      var apiUrl = apiServer + relativePath + "?appKey=" + apiKey + "&categoryId=" + categoryId;
+      var apiUrl = apiServer + relativePath + "?appKey=" + apiKey + "&categoryId=" + categoryId.toString();
       return apiUrl;
     } else {
       var apiUrl = apiServer + relativePath + "?appKey=" + apiKey;
