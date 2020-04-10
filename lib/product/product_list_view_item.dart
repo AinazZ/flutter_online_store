@@ -14,9 +14,23 @@ class ProductListViewItem extends StatelessWidget {
       children: <Widget>[
         Row(
           children: <Widget>[
-            Image.network(product.imageUrl),
-            Text(product.title),
-            Text(product.price.toString()),
+            Image.network(
+              product.imageUrl,
+              width: 60,
+              height: 60,
+            ),
+            Container(
+              child: Text(product.title),
+              width: 250,
+              height: 60,
+              alignment: Alignment.center,
+            ),
+            Container(
+              child: Text(product.price.toString()),
+              width: 50,
+              height: 60,
+              alignment: Alignment.center,
+            ),
           ],
         ),
       ],
