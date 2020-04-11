@@ -1,28 +1,19 @@
 import 'dart:async';
-import 'dart:convert';
 
-import 'package:http/http.dart' as http;
-
-import 'package:flutteronlinestore/base_api.dart';
 import 'package:flutteronlinestore/category/category.dart';
+import 'package:flutteronlinestore/common/base_api.dart';
 
 class CategoryApi extends BaseApi {
   Future<List<Category>> loadCategories() async {
     var relativePath = "common/category/list";
     var categoryId;
-    var apiUrl = getApiUrl(relativePath, categoryId);
 
-    final response = await http.get(apiUrl);
+    final jsonResponse = await get(relativePath, categoryId);
 
-    if(response.statusCode == 200) {
-      return _parseCategories(response.body);
-    } else {
-      throw Exception('Failed to load categories');
-    }
+    return _parseCategories(jsonResponse);
   }
 
-  List<Category> _parseCategories(String responseBody) {
-    var jsonResponse = json.decode(responseBody);
+  List<Category> _parseCategories(jsonResponse) {
     if (!(jsonResponse is Map<String, dynamic>)) {
       throw Exception('Fail');
     } else {
